@@ -11,15 +11,16 @@
   "naming_series",
   "project",
   "opportunity",
+  "sales_order",
   "column_break_u5cmu",
   "date",
-  "customer",
+  "party_type",
+  "party_name",
   "tender_number",
   "section_break_lae0y",
   "costing_note_items",
   "group_items",
   "section_break_v8faf",
-  "costing_note_item_summary",
   "totals_section",
   "total_cost",
   "total_target_selling_price",
@@ -37,6 +38,26 @@
    "options": "COS-Note-.YYYY.-"
   },
   {
+   "fieldname": "party_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Party Type",
+   "options": "DocType",
+   "print_hide": 1,
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "party_name",
+   "fieldtype": "Dynamic Link",
+   "in_standard_filter": 1,
+   "label": "Party",
+   "options": "party_type",
+   "print_hide": 1,
+   "reqd": 1
+  },
+  {
    "fieldname": "project",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -51,6 +72,13 @@
    "options": "Opportunity"
   },
   {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Sales Order",
+   "options": "Sales Order"
+  },
+  {
    "fieldname": "column_break_u5cmu",
    "fieldtype": "Column Break"
   },
@@ -59,13 +87,6 @@
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "label": "Customer",
-   "options": "Customer",
    "reqd": 1
   },
   {
@@ -85,12 +106,12 @@
    "options": "Costing Note Items"
   },
   {
-    "fieldname": "group_items",
-    "fieldtype": "Table",
-    "label": "Group Item",
-    "options": "Group Item",
-    "read_only": 1
-   },
+   "fieldname": "group_items",
+   "fieldtype": "Table",
+   "label": "Group Item",
+   "options": "Group Item",
+   "read_only": 1
+  },
   {
    "fieldname": "section_break_v8faf",
    "fieldtype": "Section Break"
@@ -141,8 +162,13 @@
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2024-04-05 04:37:06.602822",
+ "links": [
+  {
+   "link_doctype": "BOQ",
+   "link_fieldname": "costing_note"
+  }
+ ],
+ "modified": "2024-09-02 00:01:11.906962",
  "modified_by": "Administrator",
  "module": "Contractor App",
  "name": "Costing Note",

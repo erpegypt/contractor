@@ -32,9 +32,53 @@ class BOQ(Document):
 		doc = frappe.get_doc("Costing Note", self.costing_note)
 		for row in doc.costing_note_items:
 			if row.name == self.line_id:
-				row.cost = self.total_cost / self.project_qty
-				row.total_cost = self.total_cost
+				row.item = self.item
+				row.cost = self.total_cost 
+				row.total_cost = self.total_cost * self.project_qty
 				row.boq_link = self.name
 				break
 
 		doc.save(ignore_permissions = True)
+
+	def on_cancel(self):
+		doc = frappe.get_doc("Costing Note", self.costing_note)
+		for row in doc.costing_note_items:
+			if row.name == self.line_id:
+				row.cost = 0
+				row.total_cost = 0
+				row.target_selling_price = 0
+				row.boq_link = None
+
+				break
+
+		doc.save(ignore_permissions = True)
+
+
+@frappe.whitelist()
+def set_boq_template(boq_template):
+
+	if not frappe.db.exists("Template BOQ", boq_template): return
+
+	tables = {}
+
+	temp = frappe.get_doc("Template BOQ", boq_template)
+
+	for table in ["material_costs", "labor_costs", "contractors_table", "expenses_table"]:
+		if temp.get(table):
+			
+			tables[table] = []
+
+			for row in temp.get(table):
+				item = frappe._dict({
+					"cost": row.get("cost", 0),
+					"qty": row.get("qty", 0), 
+					"item": row.item,
+					"total_cost": row.get("total_cost", 0)
+				})
+				if table == "material_costs": item["depreciasion_percentage"] = row.get("depreciasion_percentage")
+				else: item["uom"] = row.uom
+
+				tables[table].append(item)
+
+	return tables
+

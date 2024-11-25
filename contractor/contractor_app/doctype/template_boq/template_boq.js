@@ -1,94 +1,10 @@
 // Copyright (c) 2024, Jenan Alfahham and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on('BOQ', {
-	setup: function(frm){
-		frm.set_query("party_type", function() {
-			return{
-				"filters": {
-					"name": ["in", ["Customer", "Lead", "Prospect"]],
-				}
-			}
-		});
-		frm.set_query("boq_template", function() {
-			return{
-				"filters": {
-					"item_code": frm.doc.item,
-				}
-			}
-		});
-	},
-	onload: function(frm){
-		frm.trigger('setup_queries');
-	},
-	boq_template: function(frm){
-		if (frm.doc.item && frm.doc.boq_template){
-			frappe.call({
-				"method": "contractor.contractor_app.doctype.boq.boq.set_boq_template",
-				"args": {
-					"boq_template": frm.doc.boq_template,
-					"doc": frm.doc
-				},
-				callback: function(r){
-					if (r.message) {
-						frm.clear_table("material_costs");
-						frm.clear_table("labor_costs");
-						frm.clear_table("contractors_table");
-						frm.clear_table("expenses_table");
-						let keys = Object.keys(r.message);
+frappe.ui.form.on('Template BOQ', {
+	// refresh: function(frm) {
 
-						for (const table of keys){
-							for (const row of r.message[table]){
-								let c = frm.add_child(table);
-								c.cost = row.cost;
-								c.item = row.item;
-								c.qty = row.qty;
-								c.total_cost = row.total_cost;
-
-								if (table == "material_costs") c.depreciasion_percentage = row.depreciasion_percentage;
-
-								else c.uom = row.uom
-							}
-							
-							frm.refresh_field(table)
-
-						}
-
-					}
-				}
-			})
-		}
-	},
-	party_type: function(frm) {
-		frm.trigger('setup_party_type');
-
-		frm.set_value("party_name", "");
-	},
-	setup_party_type: function(frm) {
-		frm.trigger('setup_queries');
-		frm.trigger("set_dynamic_field_label");
-	},
-	set_dynamic_field_label: function(frm){
-		if (frm.doc.party_type) {
-			frm.set_df_property("party_name", "label", frm.doc.party_type);
-		}
-	},
-	setup_queries: function(frm){
-		if (frm.doc.party_type == "Lead") {
-			frm.set_query('party_name', erpnext.queries['lead']);
-		}
-		else if (frm.doc.party_type == "Customer") {
-			frm.set_query('party_name', erpnext.queries['customer']);
-		} else if (frm.doc.party_type == "Prospect") {
-			frm.set_query('party_name', function() {
-				return {
-					filters: {
-						"company": me.frm.doc.company
-					}
-				};
-			});
-		}
-	}
+	// }
 });
 
 frappe.ui.form.on('Material costs', {
@@ -182,3 +98,4 @@ frappe.ui.form.on('Expenses Table', {
 		})
 	}
 });
+

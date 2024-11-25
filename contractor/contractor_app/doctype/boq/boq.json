@@ -9,15 +9,16 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "group_item",
   "unit",
-  "owners",
+  "party_type",
+  "party_name",
   "start_date",
   "expected_time_period",
   "column_break_puvaq",
   "item",
   "project_qty",
   "project",
+  "boq_template",
   "end_date",
   "section_break_6qymy",
   "material_costs",
@@ -50,25 +51,31 @@
    "reqd": 1
   },
   {
-   "fieldname": "group_item",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Group Item",
-   "options": "Item",
-   "reqd": 1
-  },
-  {
    "fieldname": "unit",
    "fieldtype": "Link",
    "label": "Unit",
    "options": "UOM"
   },
   {
-   "fieldname": "owners",
-   "fieldtype": "Link",
-   "label": "Owner",
-   "options": "Customer"
-  },
+    "fieldname": "party_type",
+    "fieldtype": "Link",
+    "in_list_view": 1,
+    "in_standard_filter": 1,
+    "label": "Party Type",
+    "options": "DocType",
+    "print_hide": 1,
+    "reqd": 1
+   },
+   {
+    "bold": 1,
+    "fieldname": "party_name",
+    "fieldtype": "Dynamic Link",
+    "in_standard_filter": 1,
+    "label": "Party",
+    "options": "party_type",
+    "print_hide": 1,
+    "reqd": 1
+   },
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
@@ -86,7 +93,7 @@
   {
    "fieldname": "item",
    "fieldtype": "Link",
-   "label": "Contracting Items",
+   "label": "Contracting Item",
    "options": "Item"
   },
   {
@@ -99,6 +106,12 @@
    "fieldtype": "Link",
    "label": "Project",
    "options": "Project"
+  },
+  {
+   "fieldname": "boq_template",
+   "fieldtype": "Link",
+   "label": "BOQ Template",
+   "options": "Template BOQ"
   },
   {
    "fieldname": "end_date",
